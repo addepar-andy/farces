@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+  </head>
+  <body>
+    <h1>Farces</h1>
+
+    <div class="toolbar">
+      <button id="login">login</button>
+      <button id="new-person">new person</button>
+    </div>
+
+    <div id="new-person-form" style="display: none">
+      <p>
+        Name:
+        <input id="name-field"/>
+      </p>
+      <p>
+        Image:
+        <input id="image-field"/>
+      </p>
+      <button id="create-person">create</button>
+    </div>
+
+    <div id="people">
+    </div>
+
+    <div id="templates" style="display: none">
+      <div class="person">
+        <h3></h3>
+        <img class="primary-pic" width="200"/>
+        <div>
+          <input prompt="pic url"/>
+          <button>add pic</button>
+        </div>
+        <div class="pics pics-collapsed"></div>
+      </div>
+
+      <div class="pic">
+        <img width="100"/>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
