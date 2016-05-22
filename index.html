@@ -7,7 +7,8 @@
 
     <div class="toolbar">
       <button id="login">login</button>
-      <button id="new-person">new person</button>
+      <button id="logout" style="display: none">logout</button>
+      <button id="new-person" style="display: none">new person</button>
     </div>
 
     <div id="new-person-form" style="display: none">
@@ -29,15 +30,27 @@
       <div class="person">
         <h3></h3>
         <img class="primary-pic" width="200"/>
+        <button class="edit">edit</button>
+        <!--
         <div>
           <input prompt="pic url"/>
           <button>add pic</button>
         </div>
         <div class="pics pics-collapsed"></div>
+        -->
       </div>
 
       <div class="pic">
         <img width="100"/>
+      </div>
+
+      <div class="person-editor">
+        <p>Name: <input class="name"/></p>
+        <p>Image url: <input class="image"/></p>
+        <p>
+          <button class="save">save</button>
+          <button class="cancel">cancel</button>
+        </p>
       </div>
     </div>
 
