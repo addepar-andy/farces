@@ -1,5 +1,6 @@
 (function() {
-  let fire = new Firebase("https://addefarces.firebaseio.com/");
+  let fire = firebase.database().ref();
+  let fireAuth = firebase.auth();
   let currentUser = null;
 
   function hide(node) {
@@ -16,25 +17,26 @@
       .cloneNode(true);
   }
 
-  function afterLogin(error, authData) {
-    if (error) {
-      console.log(authData);
-      alert('could not log you in');
-    } else {
+  function login() {
+    let google = new firebase.auth.GoogleAuthProvider();
+    google.addScope('https://www.googleapis.com/auth/userinfo.email');
+    google.setCustomParameters({
+      hd: "addepar.com"
+    });
+    var SUCCESS = function(result) {
       //TODO: only save email if user doesn't already have email
       fire.child('users')
-        .child(authData.uid)
+        .child(result.user.uid)
         .child('email')
-        .set(authData.google.email.toLowerCase());
-    }
-  }
-
-  function login() {
-    fire.authWithOAuthPopup("google", afterLogin, {scope: 'email'});
+        .set(result.user.providerData[0].email.toLowerCase());
+    };
+    fireAuth.signInWithPopup(google).then(SUCCESS, console.log).catch(function(error) {
+      console.log(error);
+    });
   }
 
   function logout() {
-    fire.unauth();
+    fireAuth.signOut();
   }
 
   function newPerson() {
@@ -107,6 +109,7 @@
   }
 
   function renderPerson(personSnapshot) {
+    console.log(personSnapshot);
     let person = personSnapshot.val();
 
     let personNode = cloneFromTemplate('person');
@@ -114,12 +117,11 @@
 
     if (currentUser && currentUser.admin) {
       let editBtn = personNode.getElementsByClassName('edit')[0];
-      editBtn.addEventListener('click', (evt) => editPerson(personSnapshot.ref(), evt));
+      editBtn.addEventListener('click', (evt) => editPerson(personSnapshot.ref, evt));
     }
 
     document.getElementById('people').appendChild(personNode);
 
-    /*
     let addPicButton = personNode.getElementsByTagName('button')[0];
     let addPicInput = personNode.getElementsByTagName('input')[0];
     addPicButton.addEventListener('click', (evt) =>
@@ -136,7 +138,6 @@
       .child('pics')
       .orderByChild('negvotes')
       .on('child_added', (data) => renderPic(picsNode, data));
-    */
   }
 
   function addPic(personRef, picUrl) {
@@ -150,9 +151,7 @@
   }
 
   function renderAdminStuff() {
-    if (currentUser && currentUser.admin) {
-      document.getElementById('new-person').setAttribute('style', '');
-    }
+    document.getElementById('new-person').setAttribute('style', '');
   }
 
   function renderLogout() {
@@ -171,12 +170,9 @@
   }
 
   function init() {
-    fire.onAuth((auth) => {
+    fireAuth.onAuthStateChanged((auth) => {
       if (auth && auth.uid) {
-        fire.child('users').child(auth.uid).once('value', (userSnapshot) => {
-          currentUser = userSnapshot.val();
-          renderAdminStuff();
-        });
+        renderAdminStuff();
         renderPeople();
         renderLogout();
       } else {
@@ -192,6 +188,7 @@
 
     document.getElementById('create-person').addEventListener('click', addPerson);
   }
+
   init();
 })();
 

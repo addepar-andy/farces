@@ -1,6 +1,17 @@
 <html>
   <head>
-    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyA2_M-86iiPllqqSq35yp709unSJqhkjqI",
+        authDomain: "addefarces.firebaseapp.com",
+        databaseURL: "https://addefarces.firebaseio.com",
+        storageBucket: "addefarces.appspot.com",
+        messagingSenderId: "300388749563"
+      };
+      firebase.initializeApp(config);
+    </script>
   </head>
   <body>
     <h1>Farces</h1>
@@ -31,13 +42,11 @@
         <h3></h3>
         <img class="primary-pic" width="200"/>
         <button class="edit">edit</button>
-        <!--
         <div>
           <input prompt="pic url"/>
           <button>add pic</button>
         </div>
         <div class="pics pics-collapsed"></div>
-        -->
       </div>
 
       <div class="pic">
